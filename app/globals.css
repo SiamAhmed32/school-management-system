@@ -218,6 +218,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .login-story {
   position: relative;
   overflow: hidden;
+  min-width: 0;
   min-height: 100dvh;
   padding: 48px 64px;
   color: white;
@@ -252,6 +253,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   font-weight: var(--weight-bold);
   line-height: .99;
   letter-spacing: -.055em;
+  overflow-wrap: anywhere;
 }
 .login-copy h1 em { color: #ff7d2a; font-style: normal; }
 .login-copy > p {
@@ -770,6 +772,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   min-width: 0;
   width: auto;
   max-width: 100%;
+  overflow-x: hidden;
 }
 .topbar {
   position: sticky;
@@ -1062,10 +1065,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .spark.green i { background: #67cfaa; }
 .spark.purple i { background: #a598ef; }
 .spark.orange i { background: #f5aa7b; }
+.dashboard { min-width: 0; max-width: 100%; }
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, .85fr) minmax(0, .9fr);
   gap: var(--section-gap);
+  min-width: 0;
+  max-width: 100%;
 }
 .schedule-panel { grid-column: span 2; min-width: 0; }
 .schedule-toolbar { padding-bottom: 8px; }
@@ -1083,7 +1089,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   font-size: var(--text-support);
   font-weight: var(--weight-semibold);
 }
-.schedule-scroll { overflow-x: auto; padding: 0 8px 8px; }
+.schedule-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0 8px 8px;
+  -webkit-overflow-scrolling: touch;
+}
 .schedule-times {
   min-width: 680px;
   display: grid;
@@ -2082,6 +2094,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   .app-shell {
     display: block;
     grid-template-columns: none;
+    overflow-x: hidden;
   }
   .sidebar {
     position: fixed;
@@ -2147,6 +2160,16 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   .top-actions > .campus-select { display: none; }
   .more-wrap { display: block; }
   .more-panel .campus-select { display: block; max-width: none; }
+  .more-panel,
+  .popover {
+    position: fixed;
+    z-index: 40;
+    top: calc(64px + var(--safe-top));
+    left: max(12px, var(--safe-left));
+    right: max(12px, var(--safe-right));
+    width: auto;
+    max-width: none;
+  }
   .workspace {
     width: 100%;
     max-width: 100%;
@@ -2155,9 +2178,48 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   .kpi-grid {
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
   }
+  .dashboard,
+  .dashboard-grid,
+  .schedule-panel,
+  .schedule-scroll {
+    min-width: 0;
+    max-width: 100%;
+  }
   .dashboard-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+  .schedule-panel,
+  .quick-panel,
+  .insight-panel,
+  .attention-panel,
+  .activity-panel,
+  .campus-compare {
+    grid-column: auto;
+  }
+  .quick-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pulse-stats,
+  .campus-compare { grid-template-columns: 1fr 1fr; }
+  .pulse-events { grid-template-columns: 1fr; }
+  .welcome-row { align-items: flex-start; }
+  .welcome-row > div:first-child { min-width: 0; flex: 1 1 200px; }
+  .welcome-row h1,
+  .page-heading h1 { overflow-wrap: anywhere; }
+  .panel-head,
+  .schedule-toolbar { flex-wrap: wrap; }
+  .workspace { overflow-x: hidden; }
+  .login-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    min-height: auto;
+  }
+  .login-story {
+    min-height: auto;
+    padding: 36px 32px 40px;
+  }
+  .login-copy { margin-top: 28px; max-width: none; }
+  .login-copy h1 { font-size: clamp(36px, 8vw, 52px); }
+  .login-foot { position: static; margin-top: 28px; left: auto; bottom: auto; }
+  .login-panel { min-height: auto; padding: 32px 24px 40px; }
 }
 
 @media (max-width: 680px) {
@@ -2172,6 +2234,26 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   .heading-actions {
     width: 100%;
   }
+  .topbar { min-height: 64px; gap: 8px; }
+  .ai-button span { display: none; }
+  .ai-button { width: var(--control-h); padding: 0; justify-content: center; }
+  .role-switch { padding-left: 0; border-left: 0; }
+  .role-switch select { display: none; }
+  .login-page {
+    display: flex;
+    flex-direction: column;
+  }
+  .login-panel {
+    order: -1;
+    padding: 28px 18px 32px;
+  }
+  .mobile-brand { display: block; margin-bottom: 20px; }
+  .login-story { display: none; }
+  .login-box h2 { font-size: 30px; }
+  .form-row {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
 }
 
 @media (max-width: 430px) {
@@ -2183,4 +2265,43 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   .workspace { padding: 14px; }
   .kpi-grid { grid-template-columns: 1fr; }
   .date-chip { width: 100%; }
+  .topbar { gap: 6px; }
+  .ai-button,
+  .role-switch { display: none; }
+  .notice-button,
+  .menu-button,
+  .more-button,
+  .search-trigger {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+  .pulse-stats { grid-template-columns: 1fr; }
+  .quick-actions { grid-template-columns: minmax(0, 1fr); }
+  .health-item { grid-template-columns: 40px minmax(0, 1fr) auto; }
+  .health-item strong { display: none; }
+  .login-panel { padding: 24px 16px 28px; }
+  .login-story { padding: 24px 16px 28px; }
+  .login-copy h1 { font-size: clamp(28px, 10vw, 36px); }
+  .form-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 320px) {
+  :root,
+  .app-shell,
+  .app-shell.sidebar-collapsed {
+    --page-pad: 12px;
+  }
+  .workspace { padding: 12px; }
+  .topbar {
+    gap: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .panel-head { padding: 16px 14px 12px; }
+  .welcome-row h1,
+  .page-heading h1 { font-size: 22px; }
 }
